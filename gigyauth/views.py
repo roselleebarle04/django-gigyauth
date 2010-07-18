@@ -15,7 +15,7 @@ UIDSig,photoURL,timestamp,loginProviderUID,signature,isSiteUID,proxiedEmail
 ,thumbnailURL,nickname,firstName,loginProvider,gender,lastName,profileURL
 birthDay,country,isSiteUser
 """
-GIGYAUTH_API_KEYS = getattr(settings,'GIGYAUTH_API_KEYS','2_YxjIbtIvfNHLWQr8rTcbVPD29y1iouWkhdShHIG2Hh7QUAbd_odcbN2DBXD8J9wv')
+GIGYAUTH_API_KEY = getattr(settings,'GIGYAUTH_API_KEYS','2_YxjIbtIvfNHLWQr8rTcbVPD29y1iouWkhdShHIG2Hh7QUAbd_odcbN2DBXD8J9wv')
 LOGIN_FAILURE_PAGE= getattr(settings,'GIGYAUTH_LOGIN_FAILURE_PAGE','/') #upate this to point to your error page for login failures
 
 def gigya_login(request):
@@ -24,7 +24,7 @@ def gigya_login(request):
     This also will integrate into django's core auth system and allow users to register
     using the normal / non oauth method
     """
-    return render_to_response('gigyauth/login.html',{'api_keys':GIGYAUTH_API_KEYS},context_instance=RequestContext(request))
+    return render_to_response('gigyauth/login.html',{'api_key':GIGYAUTH_API_KEY},context_instance=RequestContext(request))
      
 def gigya_login_return(request):
     """
