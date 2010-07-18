@@ -1,6 +1,7 @@
 import django.db.models as models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
 
 class Profile(models.Model):
     """
@@ -31,3 +32,9 @@ class Profile(models.Model):
     gender          = models.CharField(max_length=2, null=True,blank=True)
     profileUrl      = models.CharField(max_length=2, null=True, blank=True)
     
+def create_profile(sender, instance=None, **kwargs):
+    if instance is None:
+        return
+    profile, created = Profile.objects.get_or_create(user=instance)
+
+post_save.connect(create_profile, sender=User)

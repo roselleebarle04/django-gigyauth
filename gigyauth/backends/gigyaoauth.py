@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import cPickle
 from django.db import connection, transaction
 import random
+from gigyauth.models import Profile
 
 def updateName( user, login, name, sid, postfix=0 ):
     """
@@ -74,6 +75,7 @@ class GigyaBackend:
             This could have a number of authentication backends if one wanted to implement
             multiple workflows for logging a user in.
         '''
+        print "attempting authentication...."
         global validName
         userProfile=False
         cursor = connection.cursor()
