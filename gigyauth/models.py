@@ -1,4 +1,6 @@
 import django.db.models as models
+from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 class Profile(models.Model):
     """
@@ -11,6 +13,7 @@ class Profile(models.Model):
 
     One unique user can have several UID's 
     """
+    user 			= models.ForeignKey(User, unique=True, null=True)
     uid             = models.CharField(max_length=255)
     login_provider  = models.CharField(max_length=150)
     timestamp       = models.DateTimeField(null=True,blank=True)

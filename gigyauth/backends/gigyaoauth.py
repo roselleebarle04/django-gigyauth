@@ -1,18 +1,8 @@
-
-
 from django.conf import settings
 from django.contrib.auth.models import User
-
-import tweepy
-
 import cPickle
 from django.db import connection, transaction
 import random
-
-
-
-CONSUMER_KEY = getattr(settings, 'CONSUMER_KEY', 'YOUR_KEY')
-CONSUMER_SECRET = getattr(settings, 'CONSUMER_SECRET', 'YOUR_SECRET')
 
 def updateName( user, login, name, sid, postfix=0 ):
     """
@@ -62,7 +52,8 @@ def updateProfile( token, user=False, userinfo={'nickname':'newUser','first_name
 
     try: 
         userprofile = user.get_profile()
-        userprofile.access_token = cPickle.dumps(token) #ensures the token parameter is retreivable and unique
+        userprofile.uid = cPickle.dumps(token) #ensures the token parameter is retreivable and unique
+        userprofile.user_id = user.id
         userprofile.save()
         transaction.commit()
     except:
@@ -76,7 +67,7 @@ class GigyaBackend:
         > http://wiki.gigya.com/001_Authentication_Quick_start
         
     """
-    def authenticate(self, access_token,infodict):
+    def authenticate(self, uid,infodict):
         '''
             Authenticates the token by requesting user information from gigya
             Current behavior is that of the 1-step login process documented on their site.
@@ -87,10 +78,11 @@ class GigyaBackend:
         userProfile=False
         cursor = connection.cursor()
         try:
-            cursor.execute("select * from profiles_profile where access_token=%s", [cPickle.dumps(access_token)])
-            row = cursor.fetchone()
-            userProfile = dict(zip( ( i[0] for i in cursor.description), row ))
-            return User.objects.filter(id=userProfile['user_id'])[0]
+            profile = Profile.object.get(uid=uid)
+            #cursor.execute("select * from profiles_profile where uid=%s", [cPickle.dumps(uid)])
+            #row = cursor.fetchone()
+            #userProfile = dict(zip( ( i[0] for i in cursor.description), row ))
+            return User.objects.get(id=profile.user.id)
         except Exception, e:
             print "Trying to create new user, probably okay, error was:", e
             userProfile=False
@@ -99,7 +91,7 @@ class GigyaBackend:
       
         user = False
         try: 
-            user = updateProfile( access_token, False, infodict)
+            user = updateProfile( uid, False, infodict)
         except Exception, e:
             print "Error updating profile:", e
         if not user:

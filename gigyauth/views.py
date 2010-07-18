@@ -65,8 +65,9 @@ def gigya_login_return(request):
             if request.session.has_key('redirect_url'):
                 return HttpResponseRedirect("request.session['redirect_url']")
             return HttpResponseRedirect("/")
-    except:
+    except Exception,e:
         print "Generic Gigya Return Error:", e
+        raise
         return HttpResponseRedirect(LOGIN_FAILURE_PAGE)
     
     #3. Log the newly created user in:
