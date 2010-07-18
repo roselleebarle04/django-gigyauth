@@ -1,0 +1,22 @@
+Copyright (c) 2010 Daniel Gray
+danamantium@gmail.com
+
+This project is open source, under the GNU 3.0 license 
+
+* Notes *
+The authentication backend is in progress.  There are a few things that need to be improved
+including signing for security purposes, and a few additions to the user workflow.
+This code only implements the one click login process.  Ideally something should be done which
+includes some additional info.  For your own project, you can take the data stored in the 
+profile model and hook that in either to your AUTH_PROFILE module
+
+* Installation *
+
+1. sudo python setup.py install
+2. copy over the templates
+
+have a look at the login template - you will need to provide the blocks it expects
+in the file it inherits from
+
+3. Update your settings file to include GIGYAUTH_API_KEYS=<your gigya api key>
+   and GIGYAUTH_LOGIN_FAILURE_PAGE = page to fall back on when the authentication should fail 
